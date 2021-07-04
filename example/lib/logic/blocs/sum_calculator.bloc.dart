@@ -18,6 +18,9 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
         );
 
   @override
+  bool shouldProcessEventInOrder() => false;
+
+  @override
   Future<SumCalculatorDocument> retrieveDefaultCalculatorDocument() async {
     return SumCalculatorDocument();
   }

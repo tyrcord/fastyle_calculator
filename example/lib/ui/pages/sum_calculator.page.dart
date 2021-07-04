@@ -31,6 +31,8 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
       calculatorBloc: _bloc,
       pageTitleText: 'Sum Calculator',
       requestFullApp: true,
+      dividerBuilder: (context) => _buildExtra(context, 'Divider'),
+      footerBuilder: (context) => _buildExtra(context, 'Footer'),
       fieldsBuilder: (context) {
         return Column(
           children: [
@@ -65,11 +67,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           labelText: 'Number A',
           onValueChanged: (String value) {
             currentValue = value;
-
-            _bloc.addEvent(FastCalculatorBlocEvent.patchValue(
-              key: 'numberA',
-              value: value,
-            ));
+            _patchValue('numberA', value);
           },
           valueText: currentValue!,
         );
@@ -95,16 +93,19 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           labelText: 'Number B',
           onValueChanged: (String value) {
             currentValue = value;
-
-            _bloc.addEvent(FastCalculatorBlocEvent.patchValue(
-              key: 'numberB',
-              value: value,
-            ));
+            _patchValue('numberB', value);
           },
           valueText: currentValue!,
         );
       },
     );
+  }
+
+  void _patchValue(String key, dynamic value) {
+    _bloc.addEvent(FastCalculatorBlocEvent.patchValue(
+      key: key,
+      value: value,
+    ));
   }
 
   Widget _buildNumberField({
@@ -140,6 +141,20 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           pendingText: '0.00',
         );
       },
+    );
+  }
+
+  Widget _buildExtra(BuildContext context, String labelText) {
+    return Container(
+      color: ThemeHelper.colors.getBlueGrayColor(context),
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      height: 50,
+      child: Center(
+        child: FastBody(
+          textColor: ThemeHelper.colors.getWhiteColor(context),
+          text: labelText,
+        ),
+      ),
     );
   }
 }
