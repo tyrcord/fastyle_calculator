@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_calculator_example/logic/logic.dart';
@@ -145,11 +146,26 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
             next.isBusy != previous.isBusy;
       },
       builder: (_, SumCalculatorBloState state) {
+        final sum = state.results.sum;
+        final canCopy = sum.isNotEmpty && state.isValid && !state.isBusy;
+
         return FastPendingReadOnlyTextField(
           labelText: 'Sum',
-          valueText: state.results.sum,
+          valueText: sum,
           isPending: state.isBusy,
+          enableInteractiveSelection: canCopy,
           pendingText: '0.00',
+          suffixIcon: FastIconButton(
+            icon: const Icon(Icons.content_copy),
+            shouldTrottleTime: true,
+            isEnabled: canCopy,
+            onTap: () async {
+              if (canCopy) {
+                await Clipboard.setData(ClipboardData(text: sum));
+                FastNotificationCenter.info('Copied to clipboard!');
+              }
+            },
+          ),
         );
       },
     );
@@ -191,6 +207,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           suffixIcon: FastAnimatedRotationIconButton(
             isEnabled: !extras.isFetchingAsyncValue,
             rotate: extras.isFetchingAsyncValue,
+            shouldTrottleTime: true,
             onTap: () {
               _bloc.addEvent(FastCalculatorBlocEvent.custom('async'));
             },
