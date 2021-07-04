@@ -1,0 +1,30 @@
+name: fastyle_calculator_example
+description: A new Flutter project.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.13.0 <3.0.0"
+  flutter: ">=2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  fastyle_dart: ^0.24.1
+  tbloc_dart: ^0.17.1
+  decimal: ^1.2.0
+  
+  fastyle_calculator:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+dependency_overrides:
+  fastyle_dart:
+    path: /Users/thibaultzanini/Dev/tyrcord/librairies/fastyle_dart

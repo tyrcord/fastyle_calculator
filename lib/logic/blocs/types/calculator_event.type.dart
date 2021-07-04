@@ -1,0 +1,16 @@
+enum FastCalculatorBlocEventType {
+  advancedMode,
+  asyncOperation,
+  asyncOperationDone,
+  asyncOperationFailed,
+  clear,
+  compute,
+  computed,
+  computeFailed,
+  init,
+  initialized,
+  initFailed,
+  patchValue,
+  save,
+  share,
+}
