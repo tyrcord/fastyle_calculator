@@ -3,7 +3,7 @@ import 'package:tbloc_dart/tbloc_dart.dart';
 
 class FastCalculatorBlocState<F extends FastCalculatorFields,
     R extends FastCalculatorResults> extends BlocState {
-  final Map<String, Future<dynamic>>? asyncOperations;
+  final Object? meta;
   final R results;
   final F fields;
 
@@ -14,12 +14,12 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
   const FastCalculatorBlocState({
     required this.results,
     required this.fields,
-    this.asyncOperations,
     bool isInitializing = false,
     bool isInitialized = false,
     this.isValid = false,
     this.isDirty = false,
     this.isBusy = false,
+    this.meta,
   }) : super(
           isInitializing: isInitializing,
           isInitialized: isInitialized,
@@ -28,7 +28,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
   @override
   FastCalculatorBlocState<F, R> clone() {
     return FastCalculatorBlocState<F, R>(
-      asyncOperations: asyncOperations,
+      meta: meta,
       isInitializing: isInitializing,
       isInitialized: isInitialized,
       results: results.clone() as R,
@@ -41,7 +41,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
 
   @override
   FastCalculatorBlocState<F, R> copyWith({
-    Map<String, Future<dynamic>>? asyncOperations,
+    Object? meta,
     bool? isInitializing,
     bool? isInitialized,
     R? results,
@@ -51,7 +51,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
     bool? isBusy,
   }) {
     return FastCalculatorBlocState<F, R>(
-      asyncOperations: asyncOperations ?? this.asyncOperations,
+      meta: meta ?? this.meta,
       isInitializing: isInitializing ?? this.isInitializing,
       isInitialized: isInitialized ?? this.isInitialized,
       results: results ?? this.results,
@@ -67,7 +67,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
     covariant FastCalculatorBlocState<F, R> state,
   ) {
     return FastCalculatorBlocState<F, R>(
-      asyncOperations: state.asyncOperations,
+      meta: state.meta,
       isInitializing: state.isInitializing,
       isInitialized: state.isInitialized,
       results: results.merge(state.results) as R,
@@ -80,7 +80,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
 
   @override
   List<Object?> get props => [
-        asyncOperations,
+        meta,
         isInitializing,
         isInitialized,
         results,
