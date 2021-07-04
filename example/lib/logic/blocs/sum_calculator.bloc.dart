@@ -20,9 +20,6 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
         );
 
   @override
-  bool shouldProcessEventInOrder() => false;
-
-  @override
   Future<SumCalculatorDocument> retrieveDefaultCalculatorDocument() async {
     return SumCalculatorDocument();
   }
@@ -97,5 +94,10 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
     log('Number A: ${currentState.fields.numberA}');
     log('Number B: ${currentState.fields.numberB}');
     log('Sum: ${currentState.results.sum}');
+  }
+
+  @override
+  Future<FastCalculatorResults> retrieveDefaultResult() async {
+    return SumCalculatorResults();
   }
 }

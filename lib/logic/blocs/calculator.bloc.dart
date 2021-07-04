@@ -29,6 +29,9 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
   Future<FastCalculatorResults> compute();
 
   @protected
+  Future<FastCalculatorResults> retrieveDefaultResult();
+
+  @protected
   Future<S> initializeDefaultCalculatorState() async => currentState;
 
   @protected
@@ -39,6 +42,9 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
 
   @protected
   Future<void> shareCalculatorState() async => null;
+
+  @override
+  bool shouldProcessEventInOrder() => false;
 
   @override
   Stream<S> mapEventToState(FastCalculatorBlocEvent event) async* {
@@ -53,28 +59,27 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
         isInitializing &&
         !isInitialized) {
       yield* _handleInitializedEvent();
+    } else if (eventType == FastCalculatorBlocEventType.initFailed &&
+        isInitializing &&
+        !isInitialized) {
+      yield currentState.copyWith(
+        isInitializing: false,
+        isInitialized: false,
+      ) as S;
     } else if (isInitialized) {
       if (eventType == FastCalculatorBlocEventType.patchValue) {
-        var state = await patchCalculatorState(payload!.key!, payload.value);
-
-        if (state != null) {
-          await saveCalculatorState();
-          yield state;
-          addEvent(FastCalculatorBlocEvent.compute());
-        }
+        yield* _handlePatchValueEvent(payload!);
       } else if (eventType == FastCalculatorBlocEventType.compute) {
-        yield currentState.copyWith(
-          isValid: await isCalculatorStateValid(),
-          isDirty: isCalculatorStateDirty,
-          isBusy: true,
-        ) as S;
-
-        final results = await compute();
-        addEvent(FastCalculatorBlocEvent.computed(results));
+        yield* _handleComputeEvent();
       } else if (eventType == FastCalculatorBlocEventType.computed) {
         yield currentState.copyWith(
-          isBusy: false,
           results: payload!.results,
+          isBusy: false,
+        ) as S;
+      } else if (eventType == FastCalculatorBlocEventType.computeFailed) {
+        yield currentState.copyWith(
+          results: await retrieveDefaultResult(),
+          isBusy: false,
         ) as S;
       } else if (eventType == FastCalculatorBlocEventType.clear) {
         var state = await clearCalculatorState();
@@ -89,19 +94,21 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
 
   Stream<S> _handleInitializeEvent() async* {
     isInitializing = true;
-
     yield currentState.copyWith(isInitializing: true) as S;
 
-    // TODO: check for errors
-    defaultCalculatorState = await initializeDefaultCalculatorState();
-    var state = await initializeCalculatorState();
+    try {
+      defaultCalculatorState = await initializeDefaultCalculatorState();
+      var state = await initializeCalculatorState();
 
-    yield currentState
-        .merge(defaultCalculatorState)
-        .merge(state)
-        .copyWith(isInitializing: true) as S;
+      yield currentState
+          .merge(defaultCalculatorState)
+          .merge(state)
+          .copyWith(isInitializing: true) as S;
 
-    addEvent(FastCalculatorBlocEvent.initialized());
+      addEvent(FastCalculatorBlocEvent.initialized());
+    } catch (error) {
+      addEvent(FastCalculatorBlocEvent.initFailed(error));
+    }
   }
 
   Stream<S> _handleInitializedEvent() async* {
@@ -119,5 +126,35 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
     ) as S;
 
     addEvent(FastCalculatorBlocEvent.compute());
+  }
+
+  Stream<S> _handlePatchValueEvent(
+    FastCalculatorBlocEventPayload<FastCalculatorResults> payload,
+  ) async* {
+    var state = await patchCalculatorState(payload.key!, payload.value);
+
+    if (state != null) {
+      await saveCalculatorState();
+      yield state;
+      addEvent(FastCalculatorBlocEvent.compute());
+    }
+  }
+
+  Stream<S> _handleComputeEvent() async* {
+    yield currentState.copyWith(
+      isValid: await isCalculatorStateValid(),
+      isDirty: isCalculatorStateDirty,
+      isBusy: true,
+    ) as S;
+
+    try {
+      final results = await performCancellableAsyncOperation(compute());
+
+      if (results != null) {
+        addEvent(FastCalculatorBlocEvent.computed(results));
+      }
+    } catch (error) {
+      addEvent(FastCalculatorBlocEvent.computeFailed(error));
+    }
   }
 }
