@@ -1,6 +1,7 @@
 name: fastyle_calculator
 description: A new Flutter package project.
-version: 0.1.0
+version: 0.1.1
+homepage: https://github.com/tyrcord/fastyle_calculator
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
