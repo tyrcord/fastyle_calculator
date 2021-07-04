@@ -38,7 +38,7 @@ class FastCalculatorRefreshAction<B extends FastCalculatorBloc>
             previous.isValid != next.isValid;
       },
       builder: (_, FastCalculatorBlocState state) {
-        return FastAnimatedRefreshIconButton(
+        return FastAnimatedRotationIconButton(
           isEnabled: _isReady && !_shouldPreventInteractions,
           shouldTrottleTime: true,
           iconColor: primaryColor,

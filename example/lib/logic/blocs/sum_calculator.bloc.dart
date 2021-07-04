@@ -12,6 +12,7 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
         SumCalculatorFields, SumCalculatorResults>(
       fields: SumCalculatorFields(),
       results: SumCalculatorResults(),
+      extras: SumCalculatorBlocStateExtras(),
     ),
   }) : super(
           initialState: initialState,
@@ -31,6 +32,7 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
       final dNumberA = Decimal.tryParse(fields.numberA);
       final dNumberB = Decimal.tryParse(fields.numberB);
 
+      // demo purpose
       await Future.delayed(Duration(seconds: 2));
 
       if (dNumberA != null &&
@@ -65,6 +67,9 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
       );
 
       return currentState.copyWith(fields: fields);
+    } else if (key == 'asyncValue') {
+      // demo purpose
+      return currentState;
     }
   }
 
@@ -99,5 +104,46 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
   @override
   Future<FastCalculatorResults> retrieveDefaultResult() async {
     return SumCalculatorResults();
+  }
+
+  @override
+  Stream<SumCalculatorBloState> mapEventToState(
+    FastCalculatorBlocEvent event,
+  ) async* {
+    final eventType = event.type;
+
+    if (eventType == FastCalculatorBlocEventType.custom) {
+      final payload = event.payload!;
+
+      if (payload.key == 'async') {
+        yield currentState.copyWith(
+          extras: currentState.extras!.merge(
+            SumCalculatorBlocStateExtras(isFetchingAsyncValue: true),
+          ),
+        );
+
+        // no cancellable operations will go through
+        // demo purpose
+        await Future.delayed(Duration(seconds: 3));
+
+        addEvent(FastCalculatorBlocEvent.custom('asyncDone', value: '42'));
+      } else if (payload.key == 'asyncDone') {
+        yield currentState.copyWith(
+          extras: currentState.extras!.merge(
+            SumCalculatorBlocStateExtras(
+              asyncValue: payload.value as String,
+              isFetchingAsyncValue: false,
+            ),
+          ),
+        );
+
+        addEvent(FastCalculatorBlocEvent.patchValue(
+          key: 'asyncValue',
+          value: payload.value,
+        ));
+      }
+    } else {
+      yield* super.mapEventToState(event);
+    }
   }
 }

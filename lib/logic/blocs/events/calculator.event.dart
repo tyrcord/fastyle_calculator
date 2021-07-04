@@ -52,6 +52,9 @@ class FastCalculatorBlocEvent extends BlocEvent<FastCalculatorBlocEventType,
   FastCalculatorBlocEvent.save()
       : super(type: FastCalculatorBlocEventType.save);
 
-  FastCalculatorBlocEvent.advancedMode()
-      : super(type: FastCalculatorBlocEventType.advancedMode);
+  FastCalculatorBlocEvent.custom(String key, {dynamic value})
+      : super(
+          type: FastCalculatorBlocEventType.custom,
+          payload: FastCalculatorBlocEventPayload(key: key, value: value),
+        );
 }

@@ -38,6 +38,14 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           children: [
             _buildNumberAField(),
             _buildNumberBField(),
+            FastExpansionPanel(
+              titleText: 'Advanced',
+              bodyBuilder: (BuildContext context) {
+                return Column(children: [
+                  _buildAsyncField(context),
+                ]);
+              },
+            ),
           ],
         );
       },
@@ -112,6 +120,8 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
     required String labelText,
     required ValueChanged<String> onValueChanged,
     required String valueText,
+    Widget? suffixIcon,
+    bool isEnabled = true,
   }) {
     return FastNumberField(
       onValueChanged: onValueChanged,
@@ -122,7 +132,8 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
       labelText: labelText,
       placeholderText: '0.00',
       acceptDecimal: true,
-      isEnabled: true,
+      isEnabled: isEnabled,
+      suffixIcon: suffixIcon,
     );
   }
 
@@ -155,6 +166,37 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           text: labelText,
         ),
       ),
+    );
+  }
+
+  Widget _buildAsyncField(BuildContext context) {
+    return BlocBuilderWidget<SumCalculatorBloState>(
+      bloc: _bloc,
+      buildWhen: (previous, next) {
+        var oldExtras = (previous.extras as SumCalculatorBlocStateExtras);
+        var newExtras = (next.extras as SumCalculatorBlocStateExtras);
+
+        return oldExtras.isFetchingAsyncValue !=
+                newExtras.isFetchingAsyncValue ||
+            oldExtras.asyncValue != newExtras.asyncValue;
+      },
+      builder: (_, SumCalculatorBloState state) {
+        var extras = (state.extras as SumCalculatorBlocStateExtras);
+
+        return _buildNumberField(
+          labelText: 'Async value',
+          onValueChanged: (_) {},
+          valueText: extras.asyncValue,
+          isEnabled: !extras.isFetchingAsyncValue,
+          suffixIcon: FastAnimatedRotationIconButton(
+            isEnabled: !extras.isFetchingAsyncValue,
+            rotate: extras.isFetchingAsyncValue,
+            onTap: () {
+              _bloc.addEvent(FastCalculatorBlocEvent.custom('async'));
+            },
+          ),
+        );
+      },
     );
   }
 }

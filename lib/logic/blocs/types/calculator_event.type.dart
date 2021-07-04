@@ -1,6 +1,6 @@
 enum FastCalculatorBlocEventType {
-  advancedMode,
   clear,
+  custom,
   compute,
   computed,
   computeFailed,

@@ -1,9 +1,10 @@
 import 'package:fastyle_calculator/fastyle_calculator.dart';
+import 'package:tmodel_dart/tmodel_dart.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
 class FastCalculatorBlocState<F extends FastCalculatorFields,
     R extends FastCalculatorResults> extends BlocState {
-  final Object? meta;
+  final TModel? extras;
   final R results;
   final F fields;
 
@@ -19,7 +20,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
     this.isValid = false,
     this.isDirty = false,
     this.isBusy = false,
-    this.meta,
+    this.extras,
   }) : super(
           isInitializing: isInitializing,
           isInitialized: isInitialized,
@@ -28,7 +29,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
   @override
   FastCalculatorBlocState<F, R> clone() {
     return FastCalculatorBlocState<F, R>(
-      meta: meta,
+      extras: extras,
       isInitializing: isInitializing,
       isInitialized: isInitialized,
       results: results.clone() as R,
@@ -41,7 +42,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
 
   @override
   FastCalculatorBlocState<F, R> copyWith({
-    Object? meta,
+    TModel? extras,
     bool? isInitializing,
     bool? isInitialized,
     R? results,
@@ -51,7 +52,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
     bool? isBusy,
   }) {
     return FastCalculatorBlocState<F, R>(
-      meta: meta ?? this.meta,
+      extras: extras ?? this.extras,
       isInitializing: isInitializing ?? this.isInitializing,
       isInitialized: isInitialized ?? this.isInitialized,
       results: results ?? this.results,
@@ -67,7 +68,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
     covariant FastCalculatorBlocState<F, R> state,
   ) {
     return FastCalculatorBlocState<F, R>(
-      meta: state.meta,
+      extras: state.extras != null ? extras?.merge(state.extras!) : null,
       isInitializing: state.isInitializing,
       isInitialized: state.isInitialized,
       results: results.merge(state.results) as R,
@@ -80,7 +81,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
 
   @override
   List<Object?> get props => [
-        meta,
+        extras,
         isInitializing,
         isInitialized,
         results,
