@@ -14,8 +14,11 @@ class FastCalculatorBlocEvent extends BlocEvent<FastCalculatorBlocEventType,
   FastCalculatorBlocEvent.initialized()
       : super(type: FastCalculatorBlocEventType.initialized);
 
-  FastCalculatorBlocEvent.initFailed()
-      : super(type: FastCalculatorBlocEventType.initFailed);
+  FastCalculatorBlocEvent.initFailed(dynamic error)
+      : super(
+          type: FastCalculatorBlocEventType.initFailed,
+          payload: FastCalculatorBlocEventPayload(error: error),
+        );
 
   FastCalculatorBlocEvent.patchValue({
     required String key,
@@ -51,13 +54,4 @@ class FastCalculatorBlocEvent extends BlocEvent<FastCalculatorBlocEventType,
 
   FastCalculatorBlocEvent.advancedMode()
       : super(type: FastCalculatorBlocEventType.advancedMode);
-
-  FastCalculatorBlocEvent.asyncOperation()
-      : super(type: FastCalculatorBlocEventType.asyncOperation);
-
-  FastCalculatorBlocEvent.asyncOperationDone()
-      : super(type: FastCalculatorBlocEventType.asyncOperationDone);
-
-  FastCalculatorBlocEvent.asyncOperationFailed()
-      : super(type: FastCalculatorBlocEventType.asyncOperationFailed);
 }
