@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fastyle_dart: ^0.24.1
+  fastyle_dart: ^0.25.0
   tbloc_dart: ^0.17.1
   tmodel_dart: ^0.3.0
   tstore_dart: ^0.6.0
@@ -21,7 +21,3 @@ dev_dependencies:
   pedantic: ^1.11.1
   test: ^1.16.8
   dart_code_metrics: ^4.0.1
-
-dependency_overrides:
-  fastyle_dart:
-    path: /Users/thibaultzanini/Dev/tyrcord/librairies/fastyle_dart
