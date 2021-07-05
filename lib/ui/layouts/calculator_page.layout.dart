@@ -5,15 +5,17 @@ import 'package:fastyle_dart/fastyle_dart.dart';
 
 class FastCalculatorPageLayout<B extends FastCalculatorBloc>
     extends StatelessWidget {
+  final List<Widget>? calculatorActions;
+  final List<Widget>? resultsActions;
   final WidgetBuilder? dividerBuilder;
-  final WidgetBuilder resultsBuilder;
   final WidgetBuilder? footerBuilder;
+  final WidgetBuilder resultsBuilder;
   final WidgetBuilder fieldsBuilder;
   final String? pageTitleText;
   final bool showRefreshIcon;
   final bool requestFullApp;
   final Widget? refreshIcon;
-  final bool hasDisclaimer;
+  final bool showClearIcon;
   final Widget? backButton;
   final Widget? shareIcon;
   final Widget? clearIcon;
@@ -27,7 +29,9 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc>
     required this.fieldsBuilder,
     this.requestFullApp = false,
     this.showRefreshIcon = true,
-    this.hasDisclaimer = false,
+    this.showClearIcon = true,
+    this.calculatorActions,
+    this.resultsActions,
     this.dividerBuilder,
     this.footerBuilder,
     this.pageTitleText,
@@ -74,10 +78,12 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc>
       titleText: kFastCalculatorTitle,
       titleTextColor: primaryColor,
       headerActions: <Widget>[
-        FastCalculatorClearAction(
-          calculatorBloc: calculatorBloc,
-          icon: clearIcon,
-        )
+        ...?calculatorActions,
+        if (showClearIcon)
+          FastCalculatorClearAction(
+            calculatorBloc: calculatorBloc,
+            icon: clearIcon,
+          )
       ],
       child: Builder(builder: fieldsBuilder),
     );
@@ -96,6 +102,7 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc>
       titleText: kFastCalculatorResultsTitle,
       titleTextColor: primaryColor,
       headerActions: <Widget>[
+        ...?resultsActions,
         if (showRefreshIcon)
           FastCalculatorRefreshAction(
             calculatorBloc: calculatorBloc,

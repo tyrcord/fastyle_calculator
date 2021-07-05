@@ -55,6 +55,17 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           children: [_buildResults()],
         );
       },
+      resultsActions: [
+        FastIconButton(
+          iconColor: ThemeHelper.colors.getPrimaryColor(context),
+          iconAlignment: Alignment.centerRight,
+          icon: Icon(Icons.bar_chart),
+          isEnabled: false,
+          onTap: () {
+            //TODO: Wait for fastyle_graph
+          },
+        )
+      ],
     );
   }
 
