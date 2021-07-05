@@ -42,9 +42,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
             FastExpansionPanel(
               titleText: 'Advanced',
               bodyBuilder: (BuildContext context) {
-                return Column(children: [
-                  _buildAsyncField(context),
-                ]);
+                return Column(children: [_buildAsyncField(context)]);
               },
             ),
           ],
@@ -74,7 +72,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
 
     return BlocBuilderWidget<SumCalculatorBloState>(
       bloc: _bloc,
-      buildWhen: (previous, next) {
+      buildWhen: (SumCalculatorBloState previous, SumCalculatorBloState next) {
         var previousValue = previous.fields.numberA;
         var nextValue = next.fields.numberA;
 
@@ -84,12 +82,12 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
         currentValue = state.fields.numberA;
 
         return _buildNumberField(
+          valueText: currentValue!,
           labelText: 'Number A',
           onValueChanged: (String value) {
             currentValue = value;
             _patchValue('numberA', value);
           },
-          valueText: currentValue!,
         );
       },
     );
@@ -100,7 +98,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
 
     return BlocBuilderWidget<SumCalculatorBloState>(
       bloc: _bloc,
-      buildWhen: (previous, next) {
+      buildWhen: (SumCalculatorBloState previous, SumCalculatorBloState next) {
         var previousValue = previous.fields.numberB;
         var nextValue = next.fields.numberB;
 
@@ -110,12 +108,12 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
         currentValue = state.fields.numberB;
 
         return _buildNumberField(
+          valueText: currentValue!,
           labelText: 'Number B',
           onValueChanged: (String value) {
             currentValue = value;
             _patchValue('numberB', value);
           },
-          valueText: currentValue!,
         );
       },
     );
@@ -138,21 +136,21 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
     return FastNumberField(
       onValueChanged: onValueChanged,
       transformInvalidNumber: false,
-      valueText: valueText,
       shouldDebounceTime: true,
       allowAutocorrect: false,
-      labelText: labelText,
       placeholderText: '0.00',
-      acceptDecimal: true,
-      isEnabled: isEnabled,
       suffixIcon: suffixIcon,
+      labelText: labelText,
+      valueText: valueText,
+      isEnabled: isEnabled,
+      acceptDecimal: true,
     );
   }
 
   Widget _buildResults() {
     return BlocBuilderWidget<SumCalculatorBloState>(
       bloc: _bloc,
-      buildWhen: (previous, next) {
+      buildWhen: (SumCalculatorBloState previous, SumCalculatorBloState next) {
         return previous.results.sum != next.results.sum ||
             next.isBusy != previous.isBusy;
       },
@@ -201,7 +199,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
   Widget _buildAsyncField(BuildContext context) {
     return BlocBuilderWidget<SumCalculatorBloState>(
       bloc: _bloc,
-      buildWhen: (previous, next) {
+      buildWhen: (SumCalculatorBloState previous, SumCalculatorBloState next) {
         var oldExtras = (previous.extras as SumCalculatorBlocStateExtras);
         var newExtras = (next.extras as SumCalculatorBlocStateExtras);
 
