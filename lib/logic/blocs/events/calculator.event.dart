@@ -46,6 +46,7 @@ class FastCalculatorBlocEvent extends BlocEvent<FastCalculatorBlocEventType,
   FastCalculatorBlocEvent.clear()
       : super(type: FastCalculatorBlocEventType.clear);
 
+  @Deprecated('\'share\' event will be replaced by the \'options\' event')
   FastCalculatorBlocEvent.share()
       : super(type: FastCalculatorBlocEventType.share);
 
