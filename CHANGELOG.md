@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [0.3.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.3.0) (2021-07-05)
+
+### Enhancements
+
+- Allow to customize calculator actions.
+- Minor esthetic changes.
+- Update `fastyle_dart` dependency
+- Clean up.
+
 ## [0.2.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.2.0) (2021-07-04)
 
 ### Enhancements
