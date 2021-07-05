@@ -168,6 +168,8 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           pendingText: '0.00',
           suffixIcon: FastIconButton(
             icon: const Icon(Icons.content_copy),
+            iconAlignment: Alignment.centerRight,
+            padding: EdgeInsets.zero,
             shouldTrottleTime: true,
             isEnabled: canCopy,
             onTap: () async {
@@ -217,7 +219,9 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
           isEnabled: !extras.isFetchingAsyncValue,
           suffixIcon: FastAnimatedRotationIconButton(
             isEnabled: !extras.isFetchingAsyncValue,
+            iconAlignment: Alignment.centerRight,
             rotate: extras.isFetchingAsyncValue,
+            padding: EdgeInsets.zero,
             shouldTrottleTime: true,
             onTap: () {
               _bloc.addEvent(FastCalculatorBlocEvent.custom('async'));

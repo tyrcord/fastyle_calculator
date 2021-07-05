@@ -39,6 +39,7 @@ class FastCalculatorRefreshAction<B extends FastCalculatorBloc>
       },
       builder: (_, FastCalculatorBlocState state) {
         return FastAnimatedRotationIconButton(
+          iconAlignment: Alignment.centerRight,
           isEnabled: _isReady && !_shouldPreventInteractions,
           shouldTrottleTime: true,
           iconColor: primaryColor,

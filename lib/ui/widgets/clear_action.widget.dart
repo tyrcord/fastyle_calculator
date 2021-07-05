@@ -32,6 +32,7 @@ class FastCalculatorClearAction<B extends FastCalculatorBloc>
       },
       builder: (_, FastCalculatorBlocState state) {
         return FastIconButton(
+          iconAlignment: Alignment.centerRight,
           isEnabled: _isReady && state.isDirty,
           icon: icon ?? const Icon(Icons.delete),
           shouldTrottleTime: true,
