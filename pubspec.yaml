@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fastyle_dart: ^0.25.2
+  fastyle_dart: ^0.26.0
   tbloc_dart: ^0.18.1
   tmodel_dart: ^0.3.0
   tstore_dart: ^0.6.0
