@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.3.1](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.3.1) (2021-08-12)
+
+### Enhancements
+
+- Update dependencies.
+
 ## [0.3.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.3.0) (2021-07-05)
 
 ### Enhancements
