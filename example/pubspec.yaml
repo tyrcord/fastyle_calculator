@@ -4,8 +4,8 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
-  flutter: ">=2.0.0"
+  sdk: ">=2.16.0 <3.0.0"
+  flutter: ">=2.10.0"
 
 dependencies:
   flutter:
@@ -13,7 +13,7 @@ dependencies:
 
   fastyle_dart: ^0.27.1
   tbloc_dart: ^0.18.2
-  decimal: ^1.3.0
+  decimal: ^1.5.0
   tmodel_dart: ^0.3.1
 
   fastyle_calculator:
