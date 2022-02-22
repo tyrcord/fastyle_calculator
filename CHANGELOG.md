@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.5.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.5.0) (2022-02-09)
+
+### Enhancements
+
+- Better generics
+
 ## [0.4.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.4.0) (2022-02-09)
 
 ### Enhancements
