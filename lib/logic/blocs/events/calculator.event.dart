@@ -1,61 +1,96 @@
 import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
-class FastCalculatorBlocEvent extends BlocEvent<FastCalculatorBlocEventType,
-    FastCalculatorBlocEventPayload> {
+class FastCalculatorBlocEvent<R extends FastCalculatorResults>
+    extends BlocEvent<FastCalculatorBlocEventType,
+        FastCalculatorBlocEventPayload<R>> {
   FastCalculatorBlocEvent({
     required FastCalculatorBlocEventType type,
-    FastCalculatorBlocEventPayload? payload,
+    FastCalculatorBlocEventPayload<R>? payload,
   }) : super(type: type, payload: payload);
 
-  FastCalculatorBlocEvent.init()
-      : super(type: FastCalculatorBlocEventType.init);
+  static FastCalculatorBlocEvent<R> init<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(type: FastCalculatorBlocEventType.init);
+  }
 
-  FastCalculatorBlocEvent.initialized()
-      : super(type: FastCalculatorBlocEventType.initialized);
+  static FastCalculatorBlocEvent<R>
+      initialized<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.initialized,
+    );
+  }
 
-  FastCalculatorBlocEvent.initFailed(dynamic error)
-      : super(
-          type: FastCalculatorBlocEventType.initFailed,
-          payload: FastCalculatorBlocEventPayload(error: error),
-        );
+  static FastCalculatorBlocEvent<R> initFailed<R extends FastCalculatorResults>(
+    dynamic error,
+  ) {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.initFailed,
+      payload: FastCalculatorBlocEventPayload<R>(error: error),
+    );
+  }
 
-  FastCalculatorBlocEvent.patchValue({
+  static FastCalculatorBlocEvent<R>
+      patchValue<R extends FastCalculatorResults>({
     required String key,
     dynamic value,
-  }) : super(
-          type: FastCalculatorBlocEventType.patchValue,
-          payload: FastCalculatorBlocEventPayload(key: key, value: value),
-        );
+  }) {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.patchValue,
+      payload: FastCalculatorBlocEventPayload<R>(key: key, value: value),
+    );
+  }
 
-  FastCalculatorBlocEvent.compute()
-      : super(type: FastCalculatorBlocEventType.compute);
+  static FastCalculatorBlocEvent<R> compute<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.compute,
+    );
+  }
 
-  FastCalculatorBlocEvent.computed(FastCalculatorResults results)
-      : super(
-          type: FastCalculatorBlocEventType.computed,
-          payload: FastCalculatorBlocEventPayload(results: results),
-        );
+  static FastCalculatorBlocEvent<R> computed<R extends FastCalculatorResults>(
+    R results,
+  ) {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.computed,
+      payload: FastCalculatorBlocEventPayload(results: results),
+    );
+  }
 
-  FastCalculatorBlocEvent.computeFailed(dynamic error)
-      : super(
-          type: FastCalculatorBlocEventType.computeFailed,
-          payload: FastCalculatorBlocEventPayload(error: error),
-        );
+  static FastCalculatorBlocEvent<R>
+      computeFailed<R extends FastCalculatorResults>(
+    dynamic error,
+  ) {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.computeFailed,
+      payload: FastCalculatorBlocEventPayload(error: error),
+    );
+  }
 
-  FastCalculatorBlocEvent.clear()
-      : super(type: FastCalculatorBlocEventType.clear);
+  static FastCalculatorBlocEvent<R> clear<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.clear,
+    );
+  }
+
+  static FastCalculatorBlocEvent<R> save<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.save,
+    );
+  }
+
+  static FastCalculatorBlocEvent<R> custom<R extends FastCalculatorResults>(
+    String key, {
+    dynamic value,
+  }) {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.custom,
+      payload: FastCalculatorBlocEventPayload(key: key, value: value),
+    );
+  }
 
   @Deprecated('\'share\' event will be replaced by the \'options\' event')
-  FastCalculatorBlocEvent.share()
-      : super(type: FastCalculatorBlocEventType.share);
-
-  FastCalculatorBlocEvent.save()
-      : super(type: FastCalculatorBlocEventType.save);
-
-  FastCalculatorBlocEvent.custom(String key, {dynamic value})
-      : super(
-          type: FastCalculatorBlocEventType.custom,
-          payload: FastCalculatorBlocEventPayload(key: key, value: value),
-        );
+  static FastCalculatorBlocEvent<R> share<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.share,
+    );
+  }
 }

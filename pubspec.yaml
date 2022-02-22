@@ -11,14 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fastyle_dart: ^0.27.1
-  tbloc_dart: ^0.18.2
-  tmodel_dart: ^0.3.1
-  tstore_dart: ^0.6.2
+  fastyle_dart: ^0.28.0
+  tbloc_dart: ^0.19.0
+  tmodel_dart: ^0.4.0
+  tstore_dart: ^0.7.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic: ^1.11.1
   test: ^1.19.5
-  dart_code_metrics: ^4.1.0
+  dart_code_metrics: ^4.10.1

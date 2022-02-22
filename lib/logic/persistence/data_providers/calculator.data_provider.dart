@@ -1,6 +1,7 @@
+import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:tstore_dart/tstore_dart.dart';
 
-abstract class FastCalculatorDataProvider<D extends TDocument>
+abstract class FastCalculatorDataProvider<D extends FastCalculatorDocument>
     extends TDocumentDataProvider {
   FastCalculatorDataProvider({
     required String storeName,

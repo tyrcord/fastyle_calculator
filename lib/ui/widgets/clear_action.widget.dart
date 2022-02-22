@@ -4,8 +4,8 @@ import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_dart/fastyle_dart.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
-class FastCalculatorClearAction<B extends FastCalculatorBloc>
-    extends StatelessWidget {
+class FastCalculatorClearAction<B extends FastCalculatorBloc,
+    R extends FastCalculatorResults> extends StatelessWidget {
   final Widget? icon;
   final B calculatorBloc;
 
@@ -38,7 +38,7 @@ class FastCalculatorClearAction<B extends FastCalculatorBloc>
           shouldTrottleTime: true,
           iconColor: primaryColor,
           onTap: () => calculatorBloc.addEvent(
-            FastCalculatorBlocEvent.clear(),
+            FastCalculatorBlocEvent.clear<R>(),
           ),
         );
       },

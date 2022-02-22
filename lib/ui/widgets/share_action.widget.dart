@@ -4,8 +4,8 @@ import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_dart/fastyle_dart.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
-class FastCalculatorShareAction<B extends FastCalculatorBloc>
-    extends StatelessWidget {
+class FastCalculatorShareAction<B extends FastCalculatorBloc,
+    R extends FastCalculatorResults> extends StatelessWidget {
   final B calculatorBloc;
   final Widget? icon;
 
@@ -41,7 +41,7 @@ class FastCalculatorShareAction<B extends FastCalculatorBloc>
           icon: icon ?? const Icon(Icons.share),
           shouldTrottleTime: true,
           onTap: () => calculatorBloc.addEvent(
-            FastCalculatorBlocEvent.share(),
+            FastCalculatorBlocEvent.share<R>(),
           ),
         );
       },

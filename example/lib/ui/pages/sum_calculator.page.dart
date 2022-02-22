@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:developer';
 
 import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_calculator_example/logic/logic.dart';
 import 'package:fastyle_dart/fastyle_dart.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
 class SumCalculatorPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
   @override
   void initState() {
     super.initState();
-    _bloc.addEvent(FastCalculatorBlocEvent.init());
+    _bloc.addEvent(FastCalculatorBlocEvent.init<SumCalculatorResults>());
   }
 
   @override
@@ -28,7 +29,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FastCalculatorPageLayout(
+    return FastCalculatorPageLayout<SumCalculatorBloc, SumCalculatorResults>(
       calculatorBloc: _bloc,
       pageTitleText: 'Sum Calculator',
       requestFullApp: true,
@@ -120,7 +121,7 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
   }
 
   void _patchValue(String key, dynamic value) {
-    _bloc.addEvent(FastCalculatorBlocEvent.patchValue(
+    _bloc.addEvent(FastCalculatorBlocEvent.patchValue<SumCalculatorResults>(
       key: key,
       value: value,
     ));
@@ -222,7 +223,10 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
             padding: EdgeInsets.zero,
             shouldTrottleTime: true,
             onTap: () {
-              _bloc.addEvent(FastCalculatorBlocEvent.custom('async'));
+              _bloc.addEvent(
+                  FastCalculatorBlocEvent.custom<SumCalculatorResults>(
+                'async',
+              ));
             },
           ),
         );

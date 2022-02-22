@@ -6,7 +6,10 @@ import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_calculator_example/logic/logic.dart';
 
 class SumCalculatorBloc extends HydratedFastCalculatorBloc<
-    FastCalculatorBlocEvent, SumCalculatorBloState, SumCalculatorDocument> {
+    FastCalculatorBlocEvent<SumCalculatorResults>,
+    SumCalculatorBloState,
+    SumCalculatorDocument,
+    SumCalculatorResults> {
   SumCalculatorBloc({
     SumCalculatorBloState initialState = const FastCalculatorBlocState<
         SumCalculatorFields, SumCalculatorResults>(
@@ -71,6 +74,8 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
       // demo purpose
       return currentState;
     }
+
+    return null;
   }
 
   @override
@@ -83,6 +88,8 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
     } else if (key == 'numberB') {
       return document.copyWith(numberB: value as String);
     }
+
+    return null;
   }
 
   @override
@@ -102,7 +109,7 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
   }
 
   @override
-  Future<FastCalculatorResults> retrieveDefaultResult() async {
+  Future<SumCalculatorResults> retrieveDefaultResult() async {
     return SumCalculatorResults();
   }
 
@@ -126,7 +133,10 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
         // demo purpose
         await Future.delayed(Duration(seconds: 3));
 
-        addEvent(FastCalculatorBlocEvent.custom('asyncDone', value: '42'));
+        addEvent(FastCalculatorBlocEvent.custom<SumCalculatorResults>(
+          'asyncDone',
+          value: '42',
+        ));
       } else if (payload.key == 'asyncDone') {
         yield currentState.copyWith(
           extras: currentState.extras!.merge(
@@ -137,7 +147,7 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
           ),
         );
 
-        addEvent(FastCalculatorBlocEvent.patchValue(
+        addEvent(FastCalculatorBlocEvent.patchValue<SumCalculatorResults>(
           key: 'asyncValue',
           value: payload.value,
         ));

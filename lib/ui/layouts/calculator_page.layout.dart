@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_dart/fastyle_dart.dart';
 
-class FastCalculatorPageLayout<B extends FastCalculatorBloc>
-    extends StatelessWidget {
+class FastCalculatorPageLayout<B extends FastCalculatorBloc,
+    R extends FastCalculatorResults> extends StatelessWidget {
   final List<Widget>? calculatorActions;
   final List<Widget>? resultsActions;
   final WidgetBuilder? dividerBuilder;
@@ -64,7 +64,7 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc>
 
   List<Widget> _buildActions() {
     return [
-      FastCalculatorShareAction(
+      FastCalculatorShareAction<B, R>(
         calculatorBloc: calculatorBloc,
         icon: shareIcon,
       ),
@@ -80,7 +80,7 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc>
       headerActions: <Widget>[
         ...?calculatorActions,
         if (showClearIcon)
-          FastCalculatorClearAction(
+          FastCalculatorClearAction<B, R>(
             calculatorBloc: calculatorBloc,
             icon: clearIcon,
           )
@@ -104,7 +104,7 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc>
       headerActions: <Widget>[
         ...?resultsActions,
         if (showRefreshIcon)
-          FastCalculatorRefreshAction(
+          FastCalculatorRefreshAction<B, R>(
             calculatorBloc: calculatorBloc,
             icon: refreshIcon,
           ),

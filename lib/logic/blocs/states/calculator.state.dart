@@ -67,7 +67,7 @@ class FastCalculatorBlocState<F extends FastCalculatorFields,
   FastCalculatorBlocState<F, R> merge(
     covariant FastCalculatorBlocState<F, R> state,
   ) {
-    return FastCalculatorBlocState<F, R>(
+    return copyWith(
       extras: state.extras != null ? extras?.merge(state.extras!) : null,
       isInitializing: state.isInitializing,
       isInitialized: state.isInitialized,

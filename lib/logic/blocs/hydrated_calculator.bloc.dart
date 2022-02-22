@@ -5,7 +5,8 @@ import 'package:fastyle_calculator/fastyle_calculator.dart';
 abstract class HydratedFastCalculatorBloc<
     E extends FastCalculatorBlocEvent,
     S extends FastCalculatorBlocState,
-    D extends FastCalculatorDocument> extends FastCalculatorBloc<E, S> {
+    D extends FastCalculatorDocument,
+    R extends FastCalculatorResults> extends FastCalculatorBloc<E, S, R> {
   @protected
   final FastCalculatorDataProvider<D> dataProvider;
   @protected

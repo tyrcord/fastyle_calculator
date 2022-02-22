@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-
 import 'package:fastyle_calculator/fastyle_calculator.dart';
+import 'package:flutter/material.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
-abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
-    S extends FastCalculatorBlocState> extends BidirectionalBloc<E, S> {
+abstract class FastCalculatorBloc<
+    E extends FastCalculatorBlocEvent,
+    S extends FastCalculatorBlocState,
+    R extends FastCalculatorResults> extends BidirectionalBloc<E, S> {
   @protected
   late S defaultCalculatorState;
 
@@ -26,10 +27,10 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
   Future<bool> isCalculatorStateValid();
 
   @protected
-  Future<FastCalculatorResults> compute();
+  Future<R> compute();
 
   @protected
-  Future<FastCalculatorResults> retrieveDefaultResult();
+  Future<R> retrieveDefaultResult();
 
   @protected
   Future<S> initializeDefaultCalculatorState() async => currentState;
@@ -85,7 +86,7 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
         var state = await clearCalculatorState();
         await saveCalculatorState();
         yield state;
-        addEvent(FastCalculatorBlocEvent.compute());
+        addEvent(FastCalculatorBlocEvent.compute<R>());
       } else if (eventType == FastCalculatorBlocEventType.share) {
         await shareCalculatorState();
       }
@@ -105,9 +106,9 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
           .merge(state)
           .copyWith(isInitializing: true) as S;
 
-      addEvent(FastCalculatorBlocEvent.initialized());
+      addEvent(FastCalculatorBlocEvent.initialized<R>());
     } catch (error) {
-      addEvent(FastCalculatorBlocEvent.initFailed(error));
+      addEvent(FastCalculatorBlocEvent.initFailed<R>(error));
     }
   }
 
@@ -125,18 +126,18 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
       isInitialized: true,
     ) as S;
 
-    addEvent(FastCalculatorBlocEvent.compute());
+    addEvent(FastCalculatorBlocEvent.compute<R>());
   }
 
   Stream<S> _handlePatchValueEvent(
-    FastCalculatorBlocEventPayload<FastCalculatorResults> payload,
+    FastCalculatorBlocEventPayload payload,
   ) async* {
     var state = await patchCalculatorState(payload.key!, payload.value);
 
     if (state != null) {
       await saveCalculatorState();
       yield state;
-      addEvent(FastCalculatorBlocEvent.compute());
+      addEvent(FastCalculatorBlocEvent.compute<R>());
     }
   }
 
@@ -151,10 +152,10 @@ abstract class FastCalculatorBloc<E extends FastCalculatorBlocEvent,
       final results = await performCancellableAsyncOperation(compute());
 
       if (results != null) {
-        addEvent(FastCalculatorBlocEvent.computed(results));
+        addEvent(FastCalculatorBlocEvent.computed<R>(results));
       }
     } catch (error) {
-      addEvent(FastCalculatorBlocEvent.computeFailed(error));
+      addEvent(FastCalculatorBlocEvent.computeFailed<R>(error));
     }
   }
 }

@@ -4,8 +4,8 @@ import 'package:fastyle_calculator/fastyle_calculator.dart';
 import 'package:fastyle_dart/fastyle_dart.dart';
 import 'package:tbloc_dart/tbloc_dart.dart';
 
-class FastCalculatorRefreshAction<B extends FastCalculatorBloc>
-    extends StatelessWidget {
+class FastCalculatorRefreshAction<B extends FastCalculatorBloc,
+    R extends FastCalculatorResults> extends StatelessWidget {
   final B calculatorBloc;
   final Widget? icon;
 
@@ -46,7 +46,7 @@ class FastCalculatorRefreshAction<B extends FastCalculatorBloc>
           rotate: state.isBusy,
           icon: icon,
           onTap: () => calculatorBloc.addEvent(
-            FastCalculatorBlocEvent.compute(),
+            FastCalculatorBlocEvent.compute<R>(),
           ),
         );
       },
