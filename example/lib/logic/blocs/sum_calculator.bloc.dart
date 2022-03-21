@@ -20,7 +20,6 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
   }) : super(
           initialState: initialState,
           dataProvider: SumCalculatorDataProvider(),
-          saveEntry: true,
         );
 
   @override
@@ -75,7 +74,7 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
       return currentState;
     }
 
-    return null;
+    return currentState;
   }
 
   @override
@@ -89,7 +88,7 @@ class SumCalculatorBloc extends HydratedFastCalculatorBloc<
       return document.copyWith(numberB: value as String);
     }
 
-    return null;
+    return document;
   }
 
   @override

@@ -9,10 +9,6 @@ abstract class FastCalculatorBloc<
   @protected
   late S defaultCalculatorState;
 
-  @protected
-  bool get isCalculatorStateDirty =>
-      defaultCalculatorState.fields != currentState.fields;
-
   FastCalculatorBloc({
     required S initialState,
   }) : super(initialState: initialState);
@@ -24,13 +20,22 @@ abstract class FastCalculatorBloc<
   Future<S> initializeCalculatorState();
 
   @protected
-  Future<bool> isCalculatorStateValid();
-
-  @protected
   Future<R> compute();
 
   @protected
   Future<R> retrieveDefaultResult();
+
+  @protected
+  // ignore: no-empty-block
+  Future<void> initialize() async {}
+
+  @protected
+  Future<bool> isCalculatorStateValid() async => true;
+
+  @protected
+  Future<bool> isCalculatorStateDirty() async {
+    return defaultCalculatorState.fields != currentState.fields;
+  }
 
   @protected
   Future<S> initializeDefaultCalculatorState() async => currentState;
@@ -83,9 +88,11 @@ abstract class FastCalculatorBloc<
           isBusy: false,
         ) as S;
       } else if (eventType == FastCalculatorBlocEventType.clear) {
-        var state = await clearCalculatorState();
+        final nextState = await clearCalculatorState();
         await saveCalculatorState();
-        yield state;
+        yield nextState.copyWith(
+          isInitialized: true,
+        ) as S;
         addEvent(FastCalculatorBlocEvent.compute<R>());
       } else if (eventType == FastCalculatorBlocEventType.share) {
         await shareCalculatorState();
@@ -95,19 +102,21 @@ abstract class FastCalculatorBloc<
 
   Stream<S> _handleInitializeEvent() async* {
     isInitializing = true;
-    yield currentState.copyWith(isInitializing: true) as S;
+    yield currentState.copyWith(isInitializing: isInitializing) as S;
 
     try {
+      await initialize();
       defaultCalculatorState = await initializeDefaultCalculatorState();
-      var state = await initializeCalculatorState();
+      final nextState = await initializeCalculatorState();
 
       yield currentState
           .merge(defaultCalculatorState)
-          .merge(state)
-          .copyWith(isInitializing: true) as S;
+          .merge(nextState)
+          .copyWith(isInitializing: isInitializing) as S;
 
       addEvent(FastCalculatorBlocEvent.initialized<R>());
     } catch (error) {
+      isInitializing = false;
       addEvent(FastCalculatorBlocEvent.initFailed<R>(error));
     }
   }
@@ -117,13 +126,13 @@ abstract class FastCalculatorBloc<
     isInitialized = true;
 
     defaultCalculatorState = defaultCalculatorState.copyWith(
-      isInitializing: false,
-      isInitialized: true,
+      isInitializing: isInitializing,
+      isInitialized: isInitialized,
     ) as S;
 
     yield currentState.copyWith(
-      isInitializing: false,
-      isInitialized: true,
+      isInitializing: isInitializing,
+      isInitialized: isInitialized,
     ) as S;
 
     addEvent(FastCalculatorBlocEvent.compute<R>());
@@ -144,7 +153,7 @@ abstract class FastCalculatorBloc<
   Stream<S> _handleComputeEvent() async* {
     yield currentState.copyWith(
       isValid: await isCalculatorStateValid(),
-      isDirty: isCalculatorStateDirty,
+      isDirty: await isCalculatorStateDirty(),
       isBusy: true,
     ) as S;
 

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:fastyle_calculator/fastyle_calculator.dart';
+import 'package:flutter/material.dart';
 
 abstract class HydratedFastCalculatorBloc<
     E extends FastCalculatorBlocEvent,
@@ -9,15 +8,16 @@ abstract class HydratedFastCalculatorBloc<
     R extends FastCalculatorResults> extends FastCalculatorBloc<E, S, R> {
   @protected
   final FastCalculatorDataProvider<D> dataProvider;
+
   @protected
-  final bool saveEntry;
+  late D defaultDocument;
+
   @protected
   late D document;
 
   HydratedFastCalculatorBloc({
     required S initialState,
     required this.dataProvider,
-    this.saveEntry = false,
   }) : super(initialState: initialState);
 
   @protected
@@ -25,6 +25,9 @@ abstract class HydratedFastCalculatorBloc<
 
   @protected
   Future<D?> patchCalculatorDocument(String key, dynamic value);
+
+  @protected
+  Future<bool> canSaveUserEntry() async => true;
 
   @override
   void close() {
@@ -34,15 +37,16 @@ abstract class HydratedFastCalculatorBloc<
 
   @override
   @mustCallSuper
-  Future<S> initializeCalculatorState() async {
+  Future<void> initialize() async {
     await dataProvider.connect();
+    defaultDocument = await retrieveDefaultCalculatorDocument();
     document = await retrieveCalculatorDocument();
+  }
 
-    final fields = defaultCalculatorState.fields.merge(
-      document.toFields(),
-    ) as FastCalculatorFields?;
-
-    return defaultCalculatorState.copyWith(fields: fields) as S;
+  @override
+  @mustCallSuper
+  Future<S> initializeCalculatorState() async {
+    return initialState!.copyWith(fields: document.toFields()) as S;
   }
 
   @override
@@ -64,29 +68,25 @@ abstract class HydratedFastCalculatorBloc<
 
   @protected
   Future<D> retrieveCalculatorDocument() async {
-    D? document;
+    if (await canSaveUserEntry()) {
+      final savedDocument = await dataProvider.retrieveCalculatorDocument();
 
-    if (saveEntry) {
-      document = await dataProvider.retrieveCalculatorDocument();
+      return defaultDocument.merge(savedDocument) as D;
     }
 
-    if (document == null) {
-      return retrieveDefaultCalculatorDocument();
-    }
-
-    return document;
+    return defaultDocument;
   }
 
   @protected
   Future<void> persistCalculatorDocument() async {
-    if (saveEntry) {
+    if (await canSaveUserEntry()) {
       return dataProvider.persistCalculatorDocument(document);
     }
   }
 
   @protected
   Future<void> clearCalculatorDocument() async {
-    if (saveEntry) {
+    if (await canSaveUserEntry()) {
       return dataProvider.clearCalculatorDocument();
     }
   }
@@ -95,8 +95,9 @@ abstract class HydratedFastCalculatorBloc<
   Stream<S> mapEventToState(FastCalculatorBlocEvent event) async* {
     final payload = event.payload;
     final eventType = event.type;
+    final saveUserEntry = await canSaveUserEntry();
 
-    if (eventType == FastCalculatorBlocEventType.patchValue) {
+    if (saveUserEntry && eventType == FastCalculatorBlocEventType.patchValue) {
       var newDocument = await patchCalculatorDocument(
         payload!.key!,
         payload.value!,
