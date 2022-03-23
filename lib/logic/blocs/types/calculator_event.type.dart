@@ -10,5 +10,4 @@ enum FastCalculatorBlocEventType {
   reset,
   patchValue,
   save,
-  share,
 }

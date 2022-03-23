@@ -87,13 +87,6 @@ class FastCalculatorBlocEvent<R extends FastCalculatorResults>
     );
   }
 
-  @Deprecated('\'share\' event will be replaced by the \'options\' event')
-  static FastCalculatorBlocEvent<R> share<R extends FastCalculatorResults>() {
-    return FastCalculatorBlocEvent<R>(
-      type: FastCalculatorBlocEventType.share,
-    );
-  }
-
   static FastCalculatorBlocEvent<R> reset<R extends FastCalculatorResults>() {
     return FastCalculatorBlocEvent<R>(
       type: FastCalculatorBlocEventType.reset,

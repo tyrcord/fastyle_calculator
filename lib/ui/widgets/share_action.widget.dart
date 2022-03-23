@@ -41,7 +41,7 @@ class FastCalculatorShareAction<B extends FastCalculatorBloc,
           icon: icon ?? const Icon(Icons.share),
           shouldTrottleTime: true,
           onTap: () => calculatorBloc.addEvent(
-            FastCalculatorBlocEvent.share<R>(),
+            FastCalculatorBlocEvent.custom<R>('share'),
           ),
         );
       },

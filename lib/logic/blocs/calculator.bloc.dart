@@ -47,7 +47,9 @@ abstract class FastCalculatorBloc<
   Future<bool> saveCalculatorState() async => true;
 
   @protected
-  Future<void> shareCalculatorState() async => null;
+  Future<void> shareCalculatorState() async {
+    throw '`shareCalculatorState` function is not implemented';
+  }
 
   @override
   bool shouldProcessEventInOrder() => false;
@@ -79,8 +81,10 @@ abstract class FastCalculatorBloc<
           isInitialized: true,
         ) as S;
         addEvent(FastCalculatorBlocEvent.compute<R>());
-      } else if (eventType == FastCalculatorBlocEventType.share) {
-        await shareCalculatorState();
+      } else if (eventType == FastCalculatorBlocEventType.custom) {
+        if (payload!.key == 'share') {
+          await shareCalculatorState();
+        }
       } else if (eventType == FastCalculatorBlocEventType.reset) {
         yield* _handleResetEvent();
       }
