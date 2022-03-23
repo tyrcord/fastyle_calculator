@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [0.6.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.6.0) (2022-03-23)
+
+### Features
+
+- Allow to set the title of the results and fields sections.
+- Added handleComputeError life cycle method.
+- Added reset event.
+
+### Breaking Changes
+
+- Removed share event type.
+
 ## [0.5.0](https://github.com/tyrcord/fastyle_calculator/releases/tag/0.5.0) (2022-02-09)
 
 ### Enhancements
