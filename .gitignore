@@ -164,3 +164,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Synk
+.dccache
