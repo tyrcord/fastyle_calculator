@@ -11,6 +11,8 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc,
   final WidgetBuilder? footerBuilder;
   final WidgetBuilder resultsBuilder;
   final WidgetBuilder fieldsBuilder;
+  final String? resultsTitleText;
+  final String? fieldsTitleText;
   final String? pageTitleText;
   final bool showRefreshIcon;
   final bool requestFullApp;
@@ -31,6 +33,8 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc,
     this.showRefreshIcon = true,
     this.showClearIcon = true,
     this.calculatorActions,
+    this.resultsTitleText,
+    this.fieldsTitleText,
     this.resultsActions,
     this.dividerBuilder,
     this.footerBuilder,
@@ -75,7 +79,7 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc,
     final primaryColor = ThemeHelper.colors.getPrimaryColor(context);
 
     return FastCard(
-      titleText: kFastCalculatorTitle,
+      titleText: fieldsTitleText ?? kFastCalculatorTitle,
       titleTextColor: primaryColor,
       headerActions: <Widget>[
         ...?calculatorActions,
@@ -99,7 +103,7 @@ class FastCalculatorPageLayout<B extends FastCalculatorBloc,
     final primaryColor = ThemeHelper.colors.getPrimaryColor(context);
 
     return FastCard(
-      titleText: kFastCalculatorResultsTitle,
+      titleText: resultsTitleText ?? kFastCalculatorResultsTitle,
       titleTextColor: primaryColor,
       headerActions: <Widget>[
         ...?resultsActions,
