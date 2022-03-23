@@ -30,6 +30,10 @@ abstract class FastCalculatorBloc<
   Future<void> initialize() async {}
 
   @protected
+  // ignore: no-empty-block
+  Future<void> handleComputeError(dynamic error) async {}
+
+  @protected
   Future<bool> isCalculatorStateValid() async => true;
 
   @protected
@@ -70,6 +74,8 @@ abstract class FastCalculatorBloc<
           isBusy: false,
         ) as S;
       } else if (eventType == FastCalculatorBlocEventType.computeFailed) {
+        await handleComputeError(payload!.error);
+
         yield currentState.copyWith(
           results: await retrieveDefaultResult(),
           isBusy: false,
