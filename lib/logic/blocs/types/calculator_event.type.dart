@@ -7,6 +7,7 @@ enum FastCalculatorBlocEventType {
   init,
   initialized,
   initFailed,
+  reset,
   patchValue,
   save,
   share,

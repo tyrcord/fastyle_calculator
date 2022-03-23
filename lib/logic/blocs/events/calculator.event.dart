@@ -93,4 +93,10 @@ class FastCalculatorBlocEvent<R extends FastCalculatorResults>
       type: FastCalculatorBlocEventType.share,
     );
   }
+
+  static FastCalculatorBlocEvent<R> reset<R extends FastCalculatorResults>() {
+    return FastCalculatorBlocEvent<R>(
+      type: FastCalculatorBlocEventType.reset,
+    );
+  }
 }
