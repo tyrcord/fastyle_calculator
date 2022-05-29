@@ -4,14 +4,14 @@ version: 0.6.0
 homepage: https://github.com/tyrcord/fastyle_calculator
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
-  flutter: ">=2.10.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=3.0.1"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  fastyle_dart: ^0.28.0
+  fastyle_dart: ^0.29.0
   tbloc_dart: ^0.19.0
   tmodel_dart: ^0.4.0
   tstore_dart: ^0.7.1
@@ -20,5 +20,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic: ^1.11.1
-  test: ^1.19.5
-  dart_code_metrics: ^4.10.1
+  test: ^1.21.1
+  dart_code_metrics: ^4.15.2
