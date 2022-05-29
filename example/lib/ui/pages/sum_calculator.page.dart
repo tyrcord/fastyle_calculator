@@ -15,6 +15,11 @@ class SumCalculatorPage extends StatefulWidget {
 class _SumCalculatorPageState extends State<SumCalculatorPage> {
   final _bloc = SumCalculatorBloc();
 
+  final Future<String> _calculation = Future<String>.delayed(
+    const Duration(seconds: 2),
+    () => 'Data Loaded',
+  );
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +38,25 @@ class _SumCalculatorPageState extends State<SumCalculatorPage> {
       calculatorBloc: _bloc,
       pageTitleText: 'Sum Calculator',
       requestFullApp: true,
-      dividerBuilder: (context) => _buildExtra(context, 'Divider'),
+      dividerBuilder: (context) {
+        return FutureBuilder<String>(
+          future: _calculation, // a previously-obtained Future<String> or null
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.hasData) {
+              return _buildExtra(context, 'Divider');
+            }
+
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        );
+      },
       footerBuilder: (context) => _buildExtra(context, 'Footer'),
       fieldsBuilder: (context) {
         return Column(
